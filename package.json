@@ -1,0 +1,39 @@
+{
+  "name": "wear",
+  "version": "1.0.0",
+  "description": "CryptoXR token",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive --exit",
+    "dp-bsc": "npx hardhat run --network bsc scripts/wear.deploy.js",
+    "dp-eth": "npx hardhat run --network eth scripts/wear.deploy.js",
+    "dp-pol": "npx hardhat run --network pol scripts/wear.deploy.js",
+    "dp-tbsc": "npx hardhat run --network tbsc scripts/wear.deploy.js",
+    "dp-hle": "npx hardhat run scripts/wear.deploy.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farhad-zada/CCIP-Compatible-Token.git"
+  },
+  "keywords": [
+    "wear",
+    "solidity",
+    "token"
+  ],
+  "author": "Farhad Zada",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farhad-zada/CCIP-Compatible-Token/issues"
+  },
+  "homepage": "https://github.com/farhad-zada/CCIP-Compatible-Token#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.3",
+    "@openzeppelin/contracts-upgradeable": "^4.9.3",
+    "dotenv": "^16.3.1",
+    "hardhat": "^2.19.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@openzeppelin/hardhat-upgrades": "^2.3.3"
+  }
+}
