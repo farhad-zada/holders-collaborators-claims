@@ -1,10 +1,6 @@
-const { task } = require("hardhat/config");
-
 require("@nomicfoundation/hardhat-toolbox");
-require("@openzeppelin/hardhat-upgrades");
 require("dotenv").config();
 /** @type import('hardhat/config').HardhatUserConfig */
-
 module.exports = {
   solidity: {
     compilers: [{ version: "0.8.18" }, { version: "0.8.20" }],
