@@ -1,3 +1,3 @@
-# Claims Collaborators Adopted
+# NOTICE 
 
-It is always someone who we never expected for!
+This is the holders adopted version of the claims contract!

@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import {SafeERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
-import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Claims is Initializable, OwnableUpgradeable, UUPSUpgradeable {
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+// this is the holders adopted version of the claims contract
+contract Claims is Ownable(msg.sender) {
+    using SafeERC20 for IERC20;
 
     error LengthMismatch();
     error VestingNotStarted();
@@ -18,15 +17,8 @@ contract Claims is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     error NegativeAmount();
     error NotEnoughContractBalance();
 
-    IERC20Upgradeable public token;
+    IERC20 public token;
     string public label;
-
-    constructor() {
-        _disableInitializers();
-    }
-
-    // solhint-disable-next-line no-empty-blocks
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     modifier vestingScheduleExists() {
         if (vestingSchedule.start > 0) {
@@ -86,17 +78,16 @@ contract Claims is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     event Withdraw(address owner, uint256 amount);
     event Allocate(address to, uint256 amount);
 
-    function initialize(
+    constructor(
         address _token,
         string memory _label,
         uint256 _start,
         uint256 _rounds,
         uint256 _interval,
         address owner
-    ) public initializer vestingScheduleCorrect(_start, _rounds, _interval) {
-        __Ownable_init();
-        this.transferOwnership(owner);
-        token = IERC20Upgradeable(_token);
+    ) vestingScheduleCorrect(_start, _rounds, _interval) {
+        transferOwnership(owner);
+        token = IERC20(_token);
         label = _label;
         admins[msg.sender] = true;
         vestingSchedule = VestingSchedule(_start, _rounds, _interval);
@@ -111,7 +102,7 @@ State modifier fonctions
     }
 
     function updateToken(address _token) public admin {
-        token = IERC20Upgradeable(_token);
+        token = IERC20(_token);
     }
 
     function setVestingSchedule(
@@ -163,8 +154,8 @@ State modifier fonctions
         label = newLabel;
     }
 
-    function transferToken(IERC20Upgradeable _token, address to, uint256 amount) public admin {
-        IERC20Upgradeable tokken = _token;
+    function transferToken(IERC20 _token, address to, uint256 amount) public admin {
+        IERC20 tokken = _token;
         tokken.transfer(to, amount);
     }
 
